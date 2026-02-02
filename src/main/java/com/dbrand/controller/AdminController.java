@@ -272,17 +272,19 @@ public class AdminController {
     }
 
     /**
-     * Get Payment by ID
+     * Get Total Revenue
      * 
-     * Purpose: Retrieves specific payment details for review
-     * Advantage: Detailed financial transaction information
+     * Purpose: Provides revenue statistics for dashboard
+     * Advantage: Key financial metrics for business decisions
      */
-    @GetMapping("/payments/{id}")
-    @Operation(summary = "Get payment by ID")
-    public ResponseEntity<Payment> getPaymentById(@PathVariable String id) {
-        return ResponseEntity.ok(paymentService.getPaymentById(id));
+    @GetMapping("/payments/total")
+    @Operation(summary = "Get total revenue")
+    public ResponseEntity<Map<String, BigDecimal>> getTotalRevenue() {
+        return ResponseEntity.ok(Map.of("total", paymentService.getTotalRevenue()));
     }
-}t Payment by ID
+
+    /**
+     * Get Payment by ID
      * 
      * Purpose: Retrieves specific payment details for review
      * Advantage: Detailed financial transaction information
