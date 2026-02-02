@@ -30,6 +30,7 @@
 
 package com.dbrand.controller;
 
+import com.dbrand.dto.OrderResponse;
 import com.dbrand.dto.UpdateOrderStatusRequest;
 import com.dbrand.model.Order;
 import com.dbrand.model.Payment;
@@ -217,7 +218,7 @@ public class AdminController {
      */
     @GetMapping("/orders")
     @Operation(summary = "Get all orders")
-    public ResponseEntity<List<Order>> getAllOrders() {
+    public ResponseEntity<List<OrderResponse>> getAllOrders() {
         return ResponseEntity.ok(orderService.getAllOrders());
     }
 
