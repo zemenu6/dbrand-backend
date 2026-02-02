@@ -36,6 +36,10 @@ public class Shoe {
     // Advantage: Accurate financial calculations
     private BigDecimal price;
     
+    // Product image URL
+    // Purpose: Visual representation for customers
+    private String imageUrl;
+    
     // Product availability status
     // Purpose: Control product visibility without deletion
     private boolean isActive;
@@ -81,6 +85,9 @@ public class Shoe {
     
     public BigDecimal getPrice() { return price; }
     public void setPrice(BigDecimal price) { this.price = price; }
+    
+    public String getImageUrl() { return imageUrl; }
+    public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
     
     public boolean isActive() { return isActive; }
     public void setActive(boolean active) { isActive = active; }
