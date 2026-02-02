@@ -101,6 +101,15 @@ public class AdminController {
      * Purpose: Provides user statistics for dashboard
      * Advantage: Quick metrics for business intelligence
      */
+    @GetMapping("/verify")
+    public ResponseEntity<?> verifyAdmin() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.isAuthenticated()) {
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+    }
+
     @GetMapping("/users/count")
     @Operation(summary = "Get user count")
     public ResponseEntity<Map<String, Long>> getUserCount() {
