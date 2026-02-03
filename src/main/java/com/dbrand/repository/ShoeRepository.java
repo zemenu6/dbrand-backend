@@ -117,7 +117,7 @@ public class ShoeRepository {
     }
 
     public List<ShoeSizeResponse> findSizesByShoeId(UUID shoeId) {
-        String sql = "SELECT size, stock_count FROM available_sizes WHERE shoe_id = ? ORDER BY size";
+        String sql = "SELECT size, stock_count FROM shoe_sizes WHERE shoe_id = ? AND is_active = true AND stock_count > 0 ORDER BY size";
         return jdbcTemplate.query(sql, shoeSizeResponseRowMapper, shoeId.toString());
     }
 
