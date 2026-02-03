@@ -39,7 +39,7 @@ public class ShoeRepository {
         response.setBrand(rs.getString("brand"));
         response.setDescription(rs.getString("description"));
         response.setPrice(rs.getBigDecimal("price"));
-        response.setImageUrl(rs.getString("primary_image_url"));
+        response.setImageUrl(rs.getString("image_url"));
         return response;
     };
 
@@ -49,10 +49,13 @@ public class ShoeRepository {
 
     public List<ShoeResponse> findAll(String brand, Integer minSize, Integer maxSize, BigDecimal minPrice, BigDecimal maxPrice) {
         StringBuilder sql = new StringBuilder(
-            "SELECT DISTINCT s.id, s.name, s.brand, s.description, s.price, s.primary_image_url " +
-            "FROM active_shoes s " +
+            "SELECT DISTINCT s.id, s.name, s.brand, s.description, s.price, " +
+            "COALESCE((SELECT si.image_url FROM shoe_images si WHERE si.shoe_id = s.id AND si.is_primary = true LIMIT 1), " +
+            "(SELECT si.image_url FROM shoe_images si WHERE si.shoe_id = s.id ORDER BY si.display_order LIMIT 1), " +
+            "'https://via.placeholder.com/300x200') as image_url " +
+            "FROM shoes s " +
             "LEFT JOIN shoe_sizes ss ON s.id = ss.shoe_id " +
-            "WHERE 1=1"
+            "WHERE s.is_active = true AND s.is_deleted = false"
         );
 
         if (brand != null && !brand.isEmpty()) {
@@ -107,7 +110,11 @@ public class ShoeRepository {
     }
 
     public Optional<ShoeResponse> findById(UUID id) {
-        String sql = "SELECT id, name, brand, description, price, primary_image_url FROM active_shoes WHERE id = ?";
+        String sql = "SELECT s.id, s.name, s.brand, s.description, s.price, " +
+                    "COALESCE((SELECT si.image_url FROM shoe_images si WHERE si.shoe_id = s.id AND si.is_primary = true LIMIT 1), " +
+                    "(SELECT si.image_url FROM shoe_images si WHERE si.shoe_id = s.id ORDER BY si.display_order LIMIT 1), " +
+                    "'https://via.placeholder.com/300x200') as image_url " +
+                    "FROM shoes s WHERE s.id = ? AND s.is_active = true AND s.is_deleted = false";
         try {
             ShoeResponse shoe = jdbcTemplate.queryForObject(sql, shoeResponseRowMapper, id.toString());
             return Optional.ofNullable(shoe);
