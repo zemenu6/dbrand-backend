@@ -23,7 +23,6 @@ public class JwtTokenUtil {
     private Long expiration;
 
     private SecretKey getSigningKey() {
-        // Use the secret directly as bytes instead of Base64 decoding
         byte[] keyBytes = secret.getBytes();
         return Keys.hmacShaKeyFor(keyBytes);
     }
@@ -36,7 +35,7 @@ public class JwtTokenUtil {
         return getClaimFromToken(token, Claims::getExpiration);
     }
 
-    public <T> T getClaimFromToken(String token, Funct<mark marker-index=0 reference-tracker>ion<Claims, T> claimsResolver) {
+    public <T> T getClaimFromToken<mark marker-index=0 reference-tracker>(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = getAllClaimsFromToken(token);
         return claimsResolver.apply(claims);
     }
